@@ -49,6 +49,13 @@ def find_max_depth(start_url):
     """
     #
 
+def getDictionary (start, G = {}):
+    G[start] = getLinks(start)
+    for link in G[start]:
+        print link
+        getDictionary(link, G)
+    return G
+
 
 if __name__=="__main__":
     starturl = "http://secon.utulsa.edu/cs2123/webtraverse/index.html"
@@ -61,4 +68,6 @@ if __name__=="__main__":
     find_shortest_path("http://secon.utulsa.edu/cs2123/webtraverse/turing.html","http://secon.utulsa.edu/cs2123/webtraverse/dijkstra.html")
     print "*********** (d) Find the longest shortest path from a starting URL *****"
     find_max_depth(starturl)
-    print getLinks(starturl)
+    # print getDictionary(starturl)
+    print getLinks("http://secon.utulsa.edu/cs2123/webtraverse/alink.html")
+    
