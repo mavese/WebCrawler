@@ -20,18 +20,41 @@ def getLinks(url,baseurl="http://secon.utulsa.edu/cs2123/webtraverse/"):
     return [baseurl+a["href"].encode('ascii','ignore') for a in soup.findAll('a')]
 
 def print_dfs(url):
-    """
-    Print all links reachable from a starting **url** 
-    in depth-first order
-    """
-    #
+    G = getDictionary(url)
+    dfsLs = recurs_dfs(G, url)
+    for link in dfsLs:
+        print link
+
+def recurs_dfs(G, url, S = set()):
+    S.add(url)
+    for u in G[url]:
+        if u in S: 
+            continue
+        recurs_dfs(G, u, S)
+    return S
 
 def print_bfs(url):
-    """
-    Print all links reachable from a starting **url** 
-    in breadth-first order
-    """
-    #
+    S, Q = set(), deque()
+    G = getDictionary(url)
+    Q.append(url)
+    while Q:
+        u = Q.popleft()
+        if u in S:
+            continue
+        S.add(u)
+        Q.extend(G[u])
+    for link in S:
+        print link
+
+def ger_parent_bfs(G, url):
+    P, Q = {url : None}, deque([url])
+    while Q:
+        u = Q.popleft()
+        for v in G[u]:
+            if v in P: continue
+            P[v] = u
+            Q.append(v)
+    return P
 
     
 def find_shortest_path(url1,url2):
@@ -41,6 +64,8 @@ def find_shortest_path(url1,url2):
     If no such path exists, say so.
     """
     #
+    G = getDictionary(url1)
+
 
 def find_max_depth(start_url):
     """
@@ -53,15 +78,11 @@ def getDictionary (start, G = {}):
     G[start] = getLinks(start)
     for link in G[start]:
         if link not in G:
-        	getDictionary(link, G)
+            getDictionary(link, G)
     return G
-
 
 if __name__=="__main__":
     starturl = "http://secon.utulsa.edu/cs2123/webtraverse/index.html"
-    links = getDictionary(starturl) 
-    for link in links:
-    	print link
     print "*********** (a) Depth-first search   **********"
     print_dfs(starturl)
     print "*********** (b) Breadth-first search **********"
