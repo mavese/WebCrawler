@@ -61,12 +61,6 @@ def get_parent_bfs(url1, url2):
 
     
 def find_shortest_path(url1,url2):
-    """
-    Find and return the shortest path
-    from **url1** to **url2** if one exists.
-    If no such path exists, say so.
-    """
-    #
     P = get_parent_bfs(url1, url2)
     ls = []
     if P != None:
@@ -83,13 +77,35 @@ def find_shortest_path(url1,url2):
 
 
 def find_max_depth(start_url):
-    """
-    Find and return the URL that is the greatest distance from start_url, along with the sequence of links that must be followed to reach the page.
-    For this problem, distance is defined as the minimum number of links that must be followed from start_url to reach the page.
-    """
-    #
-    G = getDictionary()
-    for links in G:
+    G = getDictionary(start_url)
+    P, Q = {start_url : None}, deque([start_url])
+    while Q:
+        u = Q.popleft()
+        for v in G[u]:
+            if v in P: continue
+            P[v] = u
+            Q.append(v)
+    path_dict = {}  
+    for link in P:
+    	path = []
+    	counter = 0
+    	while link != start_url:
+    		path.append(link)
+    		link = P[link]
+    		counter += 1
+    	path.append(link)
+    	path_dict[counter] = path
+    largest = -1
+    for item in path_dict:
+    	if item > largest:
+    		largest = item
+    if largest > 0:
+    	print 'The max depth of the given link is: {}'.format(largest)
+    	print 'The path is: '
+    	path_dict[largest].reverse()
+    	for link in path_dict[largest]:
+    		print link
+
         
 
 def getDictionary (start, G = {}):
