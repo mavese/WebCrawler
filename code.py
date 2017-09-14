@@ -46,15 +46,18 @@ def print_bfs(url):
     for link in S:
         print link
 
-def ger_parent_bfs(G, url):
-    P, Q = {url : None}, deque([url])
+def get_parent_bfs(url1, url2):
+    G = getDictionary(url1)
+    P, Q = {url1 : None}, deque([url1])
     while Q:
         u = Q.popleft()
         for v in G[u]:
             if v in P: continue
             P[v] = u
             Q.append(v)
-    return P
+        if(u == url2):
+            return P
+    return None
 
     
 def find_shortest_path(url1,url2):
@@ -64,7 +67,19 @@ def find_shortest_path(url1,url2):
     If no such path exists, say so.
     """
     #
-    G = getDictionary(url1)
+    P = get_parent_bfs(url1, url2)
+    ls = []
+    if P != None:
+        u = url2
+        while u != url1:
+            ls.append(u)
+            u = P[u]
+        ls.append(u)
+        for i in xrange(len(ls)):
+            print ls.pop()
+    else:
+        print "There is no path."
+
 
 
 def find_max_depth(start_url):
@@ -73,6 +88,9 @@ def find_max_depth(start_url):
     For this problem, distance is defined as the minimum number of links that must be followed from start_url to reach the page.
     """
     #
+    G = getDictionary()
+    for links in G:
+        
 
 def getDictionary (start, G = {}):
     G[start] = getLinks(start)
